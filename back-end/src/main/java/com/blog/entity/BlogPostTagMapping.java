@@ -1,7 +1,6 @@
 package com.blog.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,11 +26,11 @@ public class BlogPostTagMapping extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "blog_post_id", referencedColumnName = "id")
+    @ManyToOne()
+    @JoinColumn(nullable = false, name = "blog_post_id")
     private BlogPost blogPost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "tag_id", referencedColumnName = "id")
+    @ManyToOne()
+    @JoinColumn(nullable = false, name = "tag_id")
     private Tag tag;
 }
