@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class BlogPostMapper {
 
     private BlogPostMapper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
     public static BlogPostResponse toDto(BlogPost blogPost) {
