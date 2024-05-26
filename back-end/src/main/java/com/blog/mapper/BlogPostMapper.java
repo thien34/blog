@@ -15,16 +15,19 @@ public class BlogPostMapper {
     }
 
     public static BlogPostResponse toDto(BlogPost blogPost) {
-        Set<BlogPostTagMapping> tags = blogPost.getTags();
-        Set<TagResponse> tagResponses = tags.stream()
-                .map(map -> new TagResponse(map.getTag().getId(), map.getTag().getName()))
-                .collect(Collectors.toSet());
         return BlogPostResponse.builder()
                 .id(blogPost.getId())
                 .title(blogPost.getTitle())
                 .body(blogPost.getBody())
-                .tag(tagResponses)
+                .bodyOverview(blogPost.getBodyOverview())
+                .tag(mapTags(blogPost.getTags()))
                 .build();
+    }
+
+    private static Set<TagResponse> mapTags(Set<BlogPostTagMapping> tags) {
+        return tags.stream()
+                .map(map -> new TagResponse(map.getTag().getId(), map.getTag().getName()))
+                .collect(Collectors.toSet());
     }
 
 }

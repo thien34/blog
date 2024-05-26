@@ -4,13 +4,14 @@ import com.blog.dto.response.BlogPostResponse;
 import com.blog.service.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/blogs")
+@RequestMapping("/api/blogs")
 public class BlogPostController {
 
     private final BlogPostService blogPostService;
@@ -23,6 +24,11 @@ public class BlogPostController {
     @GetMapping("")
     public List<BlogPostResponse> getAll() {
         return blogPostService.getAll();
+    }
+
+    @GetMapping("{id}")
+    public BlogPostResponse getById(@PathVariable Long id) {
+        return blogPostService.getById(id);
     }
 
 }

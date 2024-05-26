@@ -2,6 +2,7 @@ package com.blog.service.impl;
 
 import com.blog.dto.response.BlogPostResponse;
 import com.blog.entity.BlogPost;
+import com.blog.exception.ResourceNotFoundException;
 import com.blog.mapper.BlogPostMapper;
 import com.blog.repository.BlogPostRepository;
 import com.blog.service.BlogPostService;
@@ -24,5 +25,13 @@ public class BlogPostServiceImpl implements BlogPostService {
     public List<BlogPostResponse> getAll() {
         List<BlogPost> list = blogPostRepository.findAll();
         return list.stream().map(BlogPostMapper::toDto).toList();
+    }
+
+    @Override
+    public BlogPostResponse getById(Long id) {
+        return blogPostRepository
+                .findById(id)
+                .map(BlogPostMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("BlogPost not found with id: " + id));
     }
 }

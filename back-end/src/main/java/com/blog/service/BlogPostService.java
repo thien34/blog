@@ -7,4 +7,7 @@ import java.util.List;
 public interface BlogPostService {
 
     List<BlogPostResponse> getAll();
+
+    BlogPostResponse getById(Long id);
+
 }
