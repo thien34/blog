@@ -10,39 +10,36 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
-    @Column(nullable = false, columnDefinition = "Boolean default false")
+    @Column(columnDefinition = "Boolean default false")
     private Boolean deleted = false;
 
-    @Column(nullable = false)
-    private String dataChangeCreatedBy;
+    private String createdBy;
 
-    @Column(nullable = false)
-    private LocalDateTime dataChangeCreatedTime;
+    private LocalDateTime createdTime;
 
-    private String dataChangeLastModifiedBy;
+    private String lastModifiedBy;
 
-    private LocalDateTime  dataChangeLastModifiedTime;
+    private LocalDateTime lastModifiedTime;
 
     @PrePersist
     protected void prePersist() {
-        if (this.dataChangeCreatedTime == null) dataChangeCreatedTime = LocalDateTime.now();
-        if (this.dataChangeLastModifiedTime == null) dataChangeLastModifiedTime = LocalDateTime.now();
+        if (this.createdTime == null) createdTime = LocalDateTime.now();
+        if (this.lastModifiedTime == null) lastModifiedTime = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void preUpdate() {
-        this.dataChangeLastModifiedTime = LocalDateTime.now();
+        this.lastModifiedTime = LocalDateTime.now();
     }
 
     @PreRemove
     protected void preRemove() {
-        this.dataChangeLastModifiedTime = LocalDateTime.now();
+        this.lastModifiedTime = LocalDateTime.now();
     }
 }

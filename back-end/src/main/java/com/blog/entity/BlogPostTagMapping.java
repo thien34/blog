@@ -33,4 +33,5 @@ public class BlogPostTagMapping extends BaseEntity {
     @ManyToOne()
     @JoinColumn(nullable = false, name = "tag_id")
     private Tag tag;
+
 }
