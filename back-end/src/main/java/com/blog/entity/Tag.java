@@ -14,18 +14,21 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "tag")
-public class Tag extends BaseEntity {
-
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", length = Integer.MAX_VALUE)
     private String name;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
 
 }

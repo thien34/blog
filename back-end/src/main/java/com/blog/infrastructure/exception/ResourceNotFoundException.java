@@ -1,4 +1,4 @@
-package com.blog.exception;
+package com.blog.infrastructure.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 

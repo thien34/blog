@@ -23,8 +23,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "blog_comment")
-public class BlogComment {
+@Table(name = "user_user_role_mapping")
+public class UserUserRoleMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -32,23 +32,12 @@ public class BlogComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_role_id")
+    private UserRole userRole;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "blog_post_id")
-    private BlogPost blogPost;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "blog_comment_parent_id")
-    private BlogComment blogCommentParent;
-
-    @Column(name = "comment_text", length = Integer.MAX_VALUE)
-    private String commentText;
-
-    @Column(name = "is_approved")
-    private Boolean isApproved;
 
 }

@@ -1,6 +1,5 @@
 package com.blog.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,50 +13,48 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "blog_post")
-public class BlogPost extends BaseEntity {
-
+public class BlogPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "title", length = Integer.MAX_VALUE)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "text")
+    @Column(name = "body", length = Integer.MAX_VALUE)
     private String body;
 
-    @Column(columnDefinition = "text")
+    @Column(name = "include_in_sitemap")
+    private Boolean includeInSitemap;
+
+    @Column(name = "body_overview", length = Integer.MAX_VALUE)
     private String bodyOverview;
 
-    @Column(nullable = false, columnDefinition = "Boolean default false")
-    private Boolean includeInSitemap = false;
+    @Column(name = "allow_comments")
+    private Boolean allowComments;
 
-    @Column(nullable = false, columnDefinition = "Boolean default true")
-    private Boolean allowComments = true;
+    @Column(name = "start_date_utc")
+    private Instant startDateUtc;
 
-    private String metaTitle;
+    @Column(name = "end_date_utc")
+    private Instant endDateUtc;
 
-    private String metaKeywords;
+    @Column(name = "deleted")
+    private Boolean deleted;
 
-    @Column(columnDefinition = "text")
-    private String metaDescription;
-
-    @Column(nullable = false)
-    private LocalDateTime startDateUtc;
-
-    private LocalDateTime endDateUtc;
-
-    @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL)
-    private Set<BlogPostTagMapping> tags;
+    @OneToMany(mappedBy = "blogPost")
+    private Set<BlogPostTagMapping> blogPostTagMappings = new LinkedHashSet<>();
 
 }

@@ -23,8 +23,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "blog_comment")
-public class BlogComment {
+@Table(name = "user_password")
+public class UserPassword extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,20 +35,13 @@ public class BlogComment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "blog_post_id")
-    private BlogPost blogPost;
+    @Column(name = "password_format_id")
+    private Integer passwordFormatId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "blog_comment_parent_id")
-    private BlogComment blogCommentParent;
+    @Column(name = "password", length = Integer.MAX_VALUE)
+    private String password;
 
-    @Column(name = "comment_text", length = Integer.MAX_VALUE)
-    private String commentText;
-
-    @Column(name = "is_approved")
-    private Boolean isApproved;
+    @Column(name = "password_salt", length = Integer.MAX_VALUE)
+    private String passwordSalt;
 
 }
