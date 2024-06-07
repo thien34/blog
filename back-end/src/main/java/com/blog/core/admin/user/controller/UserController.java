@@ -4,6 +4,7 @@ import com.blog.core.admin.user.dto.request.UserCreationRequest;
 import com.blog.core.admin.user.dto.request.UserUpdateRequest;
 import com.blog.core.admin.user.service.UserService;
 import com.blog.core.common.ResponseData;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseData<?> createUser(@RequestBody UserCreationRequest userRequest) {
+    public ResponseData<?> createUser(@RequestBody @Valid UserCreationRequest userRequest) {
         userService.createUser(userRequest);
         return ResponseData.builder()
                 .status(201)

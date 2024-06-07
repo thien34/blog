@@ -34,6 +34,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void createUser(UserCreationRequest userRequest) {
 
+        if (userRepository.existsByUsername(userRequest.getUsername())) {
+            throw new RuntimeException("Username is already taken!");
+        }
+
         User user = userRepository.save(UserMapper.mapToUser(userRequest));
 
         PasswordCreationRequest creationRequest = PasswordCreationRequest.builder()
