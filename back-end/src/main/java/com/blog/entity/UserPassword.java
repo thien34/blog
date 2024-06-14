@@ -35,13 +35,7 @@ public class UserPassword extends Auditable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "password_format_id")
-    private Integer passwordFormatId;
-
     @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
-
-    @Column(name = "password_salt", length = Integer.MAX_VALUE)
-    private String passwordSalt;
 
 }

@@ -5,33 +5,22 @@ import com.blog.core.admin.user.dto.request.PasswordUpdateRequest;
 import com.blog.core.admin.user.repository.UserPasswordRepository;
 import com.blog.core.admin.user.service.UserPasswordService;
 import com.blog.entity.UserPassword;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserPasswordServiceImpl implements UserPasswordService {
 
     private final UserPasswordRepository userPasswordRepository;
-//    private final PasswordEncoder passwordEncoder;
-
-//    @Autowired
-//    public UserPasswordServiceImpl(UserPasswordRepository userPasswordRepository, PasswordEncoder passwordEncoder) {
-//        this.userPasswordRepository = userPasswordRepository;
-//        this.passwordEncoder = passwordEncoder;
-//    }
-
-    @Autowired
-    public UserPasswordServiceImpl(UserPasswordRepository userPasswordRepository) {
-        this.userPasswordRepository = userPasswordRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void createUserPassword(PasswordCreationRequest passwordRequest) {
         UserPassword userPassword = UserPassword.builder()
                 .user(passwordRequest.getUser())
-//                .password(passwordEncoder.encode(passwordRequest.getRawPassword()))
-                .password(passwordRequest.getRawPassword())
-                .passwordFormatId(1)
+                .password(passwordEncoder.encode(passwordRequest.getRawPassword()))
                 .build();
         userPasswordRepository.save(userPassword);
     }

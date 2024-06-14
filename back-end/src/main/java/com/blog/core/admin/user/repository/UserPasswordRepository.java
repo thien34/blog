@@ -3,5 +3,10 @@ package com.blog.core.admin.user.repository;
 import com.blog.entity.UserPassword;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserPasswordRepository extends JpaRepository<UserPassword, Long>{
+import java.util.Optional;
+
+public interface UserPasswordRepository extends JpaRepository<UserPassword, Long> {
+
+    Optional<UserPassword> findByUserId(Long userId);
+
 }

@@ -24,7 +24,6 @@ public class UserCreationRequest {
 
     private Boolean gender;
 
-
     private Instant dateOfBirth;
 
     private String streetAddress;
