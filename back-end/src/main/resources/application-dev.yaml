@@ -27,3 +27,5 @@ spring:
       max-request-size: 10MB
   main:
     allow-bean-definition-overriding: true
+jwt:
+  signerKey: "EPSXOkSxVWsq9ulTwMeiILY1feuCdvMOVgzxDQ4HmaGwqs26wsasHemUQLLvCHHJ"
