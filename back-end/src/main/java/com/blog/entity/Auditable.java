@@ -3,8 +3,10 @@ package com.blog.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,22 +19,23 @@ import java.time.LocalDateTime;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class Auditable {
 
     @CreatedBy
     @Column(nullable = false, updatable = false)
-    protected Long createdBy;
+    Long createdBy;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    protected LocalDateTime createdDate;
+    LocalDateTime createdDate;
 
     @LastModifiedBy
     @Column(nullable = false)
-    protected Long lastModifiedBy;
+    Long lastModifiedBy;
 
     @LastModifiedDate
     @Column(nullable = false)
-    protected LocalDateTime lastModifiedDate;
+    LocalDateTime lastModifiedDate;
 
 }

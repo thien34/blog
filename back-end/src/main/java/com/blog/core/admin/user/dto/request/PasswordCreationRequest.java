@@ -1,17 +1,19 @@
 package com.blog.core.admin.user.dto.request;
 
-import com.blog.entity.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PasswordCreationRequest {
 
-    private User user;
+    Long userId;
 
-    private String rawPassword;
+    String rawPassword;
 
 }

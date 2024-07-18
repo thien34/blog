@@ -1,4 +1,4 @@
-package com.blog.core.admin.user.repository;
+package com.blog.repository;
 
 import com.blog.entity.UserPassword;
 import org.springframework.data.jpa.repository.JpaRepository;

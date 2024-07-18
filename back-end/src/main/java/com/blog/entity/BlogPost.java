@@ -7,11 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.util.LinkedHashSet;
@@ -23,38 +25,39 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "blog_post")
 public class BlogPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    Long id;
 
     @Column(name = "title", length = Integer.MAX_VALUE)
-    private String title;
+    String title;
 
     @Column(name = "body", length = Integer.MAX_VALUE)
-    private String body;
+    String body;
 
     @Column(name = "include_in_sitemap")
-    private Boolean includeInSitemap;
+    Boolean includeInSitemap;
 
     @Column(name = "body_overview", length = Integer.MAX_VALUE)
-    private String bodyOverview;
+    String bodyOverview;
 
     @Column(name = "allow_comments")
-    private Boolean allowComments;
+    Boolean allowComments;
 
     @Column(name = "start_date_utc")
-    private Instant startDateUtc;
+    Instant startDateUtc;
 
     @Column(name = "end_date_utc")
-    private Instant endDateUtc;
+    Instant endDateUtc;
 
     @Column(name = "deleted")
-    private Boolean deleted;
+    Boolean deleted;
 
     @OneToMany(mappedBy = "blogPost")
-    private Set<BlogPostTagMapping> blogPostTagMappings = new LinkedHashSet<>();
+    Set<BlogPostTagMapping> blogPostTagMappings = new LinkedHashSet<>();
 
 }

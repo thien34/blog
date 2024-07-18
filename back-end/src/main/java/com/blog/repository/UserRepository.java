@@ -1,4 +1,4 @@
-package com.blog.core.admin.user.repository;
+package com.blog.repository;
 
 import com.blog.entity.User;
 import org.springframework.data.domain.Page;

@@ -1,12 +1,13 @@
 package com.blog.core.auth.service.impl;
 
-import com.blog.core.admin.user.repository.UserPasswordRepository;
-import com.blog.core.admin.user.repository.UserRepository;
 import com.blog.core.auth.dto.request.AuthenticationRequest;
 import com.blog.core.auth.dto.request.IntrospectRequest;
 import com.blog.core.auth.dto.response.AuthenticationResponse;
 import com.blog.core.auth.dto.response.IntrospectResponse;
 import com.blog.core.auth.service.AuthenticationService;
+import com.blog.entity.User;
+import com.blog.repository.UserPasswordRepository;
+import com.blog.repository.UserRepository;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
+import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -53,24 +55,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!authenticated) {
             throw new RuntimeException("Invalid password");
         }
-        var token = generateToken(authenticationRequest.getUsername());
+        var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();
     }
 
     @Override
-    public String generateToken(String username) {
+    public String generateToken(User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(user.getUsername())
                 .issuer("blog.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plusSeconds(60 * 60).toEpochMilli()
+                        Instant.now().plusSeconds(60L * 60).toEpochMilli()
                 ))
-                .claim("custom", "value")
+                .claim("scope", buildScope(user))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -97,5 +99,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return IntrospectResponse.builder()
                 .valid(verified && expirationTime.after(new Date()))
                 .build();
+    }
+
+    private String buildScope(User user) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (!user.getUserUserRoleMappings().isEmpty()) {
+            user.getUserUserRoleMappings().forEach(role -> stringJoiner.add(role.getUserRole().getName()));
+        }
+        return stringJoiner.toString();
     }
 }

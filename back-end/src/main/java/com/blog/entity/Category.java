@@ -9,11 +9,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -23,34 +25,35 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Builder
 @Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "parent_category_id")
-    private Category parentCategory;
+    Category parentCategory;
 
     @Column(name = "name", length = Integer.MAX_VALUE)
-    private String name;
+    String name;
 
     @Column(name = "published")
-    private Boolean published;
+    Boolean published;
 
     @Column(name = "show_on_home_page")
-    private Boolean showOnHomePage;
+    Boolean showOnHomePage;
 
     @Column(name = "include_in_top_menu")
-    private Boolean includeInTopMenu;
+    Boolean includeInTopMenu;
 
     @Column(name = "page_size")
-    private Integer pageSize;
+    Integer pageSize;
 
     @Column(name = "display_order")
-    private Integer displayOrder;
+    Integer displayOrder;
 
 }

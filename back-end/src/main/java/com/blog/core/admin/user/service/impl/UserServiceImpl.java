@@ -2,20 +2,26 @@ package com.blog.core.admin.user.service.impl;
 
 import com.blog.core.admin.user.dto.request.PasswordCreationRequest;
 import com.blog.core.admin.user.dto.request.UserCreationRequest;
+import com.blog.core.admin.user.dto.request.UserRoleMappingRequest;
 import com.blog.core.admin.user.dto.request.UserUpdateRequest;
 import com.blog.core.admin.user.dto.response.UserResponse;
 import com.blog.core.admin.user.mapper.UserMapper;
-import com.blog.core.admin.user.repository.UserRepository;
 import com.blog.core.admin.user.service.UserPasswordService;
+import com.blog.core.admin.user.service.UserRoleMappingService;
 import com.blog.core.admin.user.service.UserService;
 import com.blog.core.common.PageResponse;
 import com.blog.entity.User;
+import com.blog.infrastructure.constant.Role;
 import com.blog.infrastructure.exception.ResourceNotFoundException;
+import com.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,31 +29,40 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserPasswordService userPasswordService;
-    private final UserMapper userMapper;
+    private final UserRoleMappingService userRoleMappingService;
 
     @Override
+    @Transactional
     public void createUser(UserCreationRequest userRequest) {
-
-        if (userRepository.existsByUsername(userRequest.getUsername())) {
+        //1. save user
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(userRequest.getUsername()))) {
             throw new RuntimeException("Username is already taken!");
         }
 
-        User user = userRepository.save(userMapper.mapToUser(userRequest));
+        User user = userRepository.save(UserMapper.INSTANCE.mapToEntity(userRequest));
 
+        //2. save user password
         PasswordCreationRequest creationRequest = PasswordCreationRequest.builder()
-                .user(user)
+                .userId(user.getId())
                 .rawPassword(userRequest.getPassword())
                 .build();
 
         userPasswordService.createUserPassword(creationRequest);
+
+        //3. save role
+        UserRoleMappingRequest roleMappingRequest = UserRoleMappingRequest.builder()
+                .userId(user.getId())
+                .roleId(Role.USER.getId())
+                .build();
+        userRoleMappingService.saveUserRoleMapping(roleMappingRequest);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public PageResponse<?> getUsers(String username, int pageNo, int pageSize) {
         if (pageNo < 0 || pageSize <= 0) {
@@ -58,10 +73,7 @@ public class UserServiceImpl implements UserService {
 
         Page<User> userPage = userRepository.findByUsernameContaining(username, pageable);
 
-        List<UserResponse> userResponses = userPage.getContent()
-                .stream()
-                .map(userMapper::mapToUserResponse)
-                .toList();
+        List<UserResponse> userResponses = UserMapper.INSTANCE.mapToDtos(userPage.getContent());
 
         return PageResponse.builder()
                 .page(userPage.getNumber())
@@ -71,11 +83,22 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @PostAuthorize("returnObject.username == authentication.name")
     @Override
     public UserResponse getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.map(userMapper::mapToUserResponse)
+        return user.map(UserMapper.INSTANCE::mapToDto)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    }
+
+    @Override
+    public UserResponse getUserCurrent() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        return userRepository.findByUsername(name)
+                .map(UserMapper.INSTANCE::mapToDto)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + name));
     }
 
     @Override
@@ -83,7 +106,7 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-        User userUpdate = userMapper.mapToUser(userRequest, existingUser);
+        User userUpdate = UserMapper.INSTANCE.mapToEntity(userRequest, existingUser);
         userRepository.save(userUpdate);
     }
 }

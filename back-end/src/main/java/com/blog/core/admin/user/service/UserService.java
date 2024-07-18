@@ -13,6 +13,8 @@ public interface UserService {
 
     UserResponse getUser(Long id);
 
+    UserResponse getUserCurrent();
+
     void updateUser(Long id, UserUpdateRequest userRequest);
 
 }

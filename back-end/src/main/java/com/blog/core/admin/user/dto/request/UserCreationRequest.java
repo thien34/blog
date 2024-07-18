@@ -2,39 +2,42 @@ package com.blog.core.admin.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
     @Size(min = 5, message = "Username must be least 5 characters")
-    private String username;
+    String username;
 
     @Email
-    private String email;
+    String email;
 
-    private String firstName;
+    String firstName;
 
-    private String lastName;
+    String lastName;
 
-    private Boolean gender;
+    Boolean gender;
 
-    private Instant dateOfBirth;
+    Instant dateOfBirth;
 
-    private String streetAddress;
+    String streetAddress;
 
-    private String city;
+    String city;
 
-    private String county;
+    String county;
 
-    private String phone;
+    String phone;
 
     @Size(min = 8, message = "Password must be least 8 characters")
-    private String password;
+    String password;
 
 }

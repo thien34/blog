@@ -2,9 +2,11 @@ package com.blog.core.admin.user.service.impl;
 
 import com.blog.core.admin.user.dto.request.PasswordCreationRequest;
 import com.blog.core.admin.user.dto.request.PasswordUpdateRequest;
-import com.blog.core.admin.user.repository.UserPasswordRepository;
 import com.blog.core.admin.user.service.UserPasswordService;
+import com.blog.entity.User;
 import com.blog.entity.UserPassword;
+import com.blog.repository.UserPasswordRepository;
+import com.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,13 +17,21 @@ public class UserPasswordServiceImpl implements UserPasswordService {
 
     private final UserPasswordRepository userPasswordRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Override
     public void createUserPassword(PasswordCreationRequest passwordRequest) {
+
+        User user = userRepository.findById(passwordRequest.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String hashedPassword = passwordEncoder.encode(passwordRequest.getRawPassword());
+
         UserPassword userPassword = UserPassword.builder()
-                .user(passwordRequest.getUser())
-                .password(passwordEncoder.encode(passwordRequest.getRawPassword()))
+                .user(user)
+                .password(hashedPassword)
                 .build();
+
         userPasswordRepository.save(userPassword);
     }
 

@@ -52,4 +52,5 @@ public class GlobalExceptionHandler {
                 .message(ex.getBindingResult().getFieldError().getDefaultMessage())
                 .build();
     }
+
 }

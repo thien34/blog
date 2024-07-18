@@ -1,42 +1,48 @@
 package com.blog.core.admin.user.dto.response;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    private Long id;
+    Long id;
 
-    private String username;
+    String username;
 
-    private String email;
+    String email;
 
-    private String firstName;
+    String firstName;
 
-    private String lastName;
+    String lastName;
 
-    private Boolean gender;
+    Boolean gender;
 
-    private Instant dateOfBirth;
+    Instant dateOfBirth;
 
-    private String streetAddress;
+    String streetAddress;
 
-    private String city;
+    String city;
 
-    private String county;
+    String county;
 
-    private String phone;
+    String phone;
 
-    private Boolean active;
+    Boolean active;
 
-    private Boolean deleted;
+    Boolean deleted;
 
-    private LocalDateTime createdDate;
+    LocalDateTime createdDate;
+
+    Set<String> userRole;
 
 }

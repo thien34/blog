@@ -62,6 +62,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/current")
+    public ResponseData<?> getUserCurrent() {
+        try {
+            UserResponse userResponse = userService.getUserCurrent();
+            return new ResponseData<>(HttpStatus.OK.value(), "User retrieved successfully", userResponse);
+        } catch (Exception e) {
+            log.error("Error getting user", e);
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseData<?> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest userRequest) {
         log.info("Request to update user with id, {}, {}", id, userRequest);

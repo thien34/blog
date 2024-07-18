@@ -1,34 +1,37 @@
 package com.blog.core.admin.user.dto.request;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
 
-    private String firstName;
+    String firstName;
 
-    private String lastName;
+    String lastName;
 
-    private Boolean gender;
+    Boolean gender;
 
-    private Instant dateOfBirth;
+    Instant dateOfBirth;
 
-    private String streetAddress;
+    String streetAddress;
 
-    private String city;
+    String city;
 
-    private String county;
+    String county;
 
-    private String phone;
+    String phone;
 
-    private Boolean active;
+    Boolean active;
 
-    private Boolean deleted;
+    Boolean deleted;
 
 }
