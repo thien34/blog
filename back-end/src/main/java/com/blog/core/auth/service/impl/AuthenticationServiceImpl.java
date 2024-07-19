@@ -22,12 +22,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 
 @Service
@@ -46,14 +49,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
 
         var user = userRepository.findByUsername(authenticationRequest.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
         var pass = userPasswordRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Password not found"));
+                .orElseThrow(() -> new NoSuchElementException("Password not found"));
 
         boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(), pass.getPassword());
         if (!authenticated) {
-            throw new RuntimeException("Invalid password");
+            throw new BadCredentialsException("Invalid password");
         }
         var token = generateToken(user);
         return AuthenticationResponse.builder()
@@ -83,7 +86,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return jwsObject.serialize();
         } catch (JOSEException e) {
             log.error("Error signing token", e);
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

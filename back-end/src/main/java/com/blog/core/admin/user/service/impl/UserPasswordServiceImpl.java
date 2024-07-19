@@ -5,6 +5,7 @@ import com.blog.core.admin.user.dto.request.PasswordUpdateRequest;
 import com.blog.core.admin.user.service.UserPasswordService;
 import com.blog.entity.User;
 import com.blog.entity.UserPassword;
+import com.blog.infrastructure.exception.ResourceNotFoundException;
 import com.blog.repository.UserPasswordRepository;
 import com.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UserPasswordServiceImpl implements UserPasswordService {
     public void createUserPassword(PasswordCreationRequest passwordRequest) {
 
         User user = userRepository.findById(passwordRequest.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + passwordRequest.getUserId()));
 
         String hashedPassword = passwordEncoder.encode(passwordRequest.getRawPassword());
 

@@ -13,7 +13,6 @@ public class UserRoleMappingServiceImpl implements UserRoleMappingService {
 
     private final UserRoleMappingRepository userRoleMappingRepository;
 
-
     @Override
     public void saveUserRoleMapping(UserRoleMappingRequest request) {
         userRoleMappingRepository.save(UserRoleMappingMapper.INSTANCE.mapToEntity(request));

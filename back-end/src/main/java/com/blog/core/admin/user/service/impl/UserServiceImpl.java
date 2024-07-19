@@ -12,6 +12,7 @@ import com.blog.core.admin.user.service.UserService;
 import com.blog.core.common.PageResponse;
 import com.blog.entity.User;
 import com.blog.infrastructure.constant.Role;
+import com.blog.infrastructure.exception.IllegalArgumentException;
 import com.blog.infrastructure.exception.ResourceNotFoundException;
 import com.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,7 @@ public class UserServiceImpl implements UserService {
     public void createUser(UserCreationRequest userRequest) {
         //1. save user
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userRequest.getUsername()))) {
-            throw new RuntimeException("Username is already taken!");
+            throw new IllegalArgumentException("Username is already taken!");
         }
 
         User user = userRepository.save(UserMapper.INSTANCE.mapToEntity(userRequest));
@@ -62,7 +61,6 @@ public class UserServiceImpl implements UserService {
         userRoleMappingService.saveUserRoleMapping(roleMappingRequest);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public PageResponse<?> getUsers(String username, int pageNo, int pageSize) {
         if (pageNo < 0 || pageSize <= 0) {
@@ -83,7 +81,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
     @Override
     public UserResponse getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
