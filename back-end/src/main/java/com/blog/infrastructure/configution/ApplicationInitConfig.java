@@ -43,7 +43,7 @@ public class ApplicationInitConfig {
                 //
                 PasswordCreationRequest creationRequest = PasswordCreationRequest.builder()
                         .userId(userSaved.getId())
-                        .rawPassword(Role.ADMIN.getName())
+                        .rawPassword(Role.ADMIN.getName().toLowerCase())
                         .build();
                 userPasswordService.createUserPassword(creationRequest);
             }
