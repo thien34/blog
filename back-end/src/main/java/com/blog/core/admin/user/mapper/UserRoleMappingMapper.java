@@ -2,7 +2,7 @@ package com.blog.core.admin.user.mapper;
 
 import com.blog.core.admin.user.dto.request.UserRoleMappingRequest;
 import com.blog.entity.User;
-import com.blog.entity.UserRole;
+import com.blog.entity.Role;
 import com.blog.entity.UserUserRoleMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,11 +26,11 @@ public interface UserRoleMappingMapper {
         return user;
     }
 
-    default UserRole mapUserRole(Long roleId) {
+    default Role mapUserRole(Long roleId) {
         if (roleId == null) {
             return null;
         }
-        UserRole userRole = new UserRole();
+        Role userRole = new Role();
         userRole.setId(roleId);
         return userRole;
     }

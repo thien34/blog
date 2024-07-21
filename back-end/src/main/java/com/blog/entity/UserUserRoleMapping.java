@@ -36,7 +36,7 @@ public class UserUserRoleMapping {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_role_id")
-    UserRole userRole;
+    Role userRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)

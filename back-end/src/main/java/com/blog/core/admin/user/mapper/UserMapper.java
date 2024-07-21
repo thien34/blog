@@ -4,7 +4,7 @@ import com.blog.core.admin.user.dto.request.UserCreationRequest;
 import com.blog.core.admin.user.dto.request.UserUpdateRequest;
 import com.blog.core.admin.user.dto.response.UserResponse;
 import com.blog.entity.User;
-import com.blog.entity.UserRole;
+import com.blog.entity.Role;
 import com.blog.entity.UserUserRoleMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,7 +34,7 @@ public interface UserMapper {
     default Set<String> mapUserUserRoleMappings(Set<UserUserRoleMapping> mappings) {
         return mappings.stream()
                 .map(UserUserRoleMapping::getUserRole)
-                .map(UserRole::getName)
+                .map(Role::getName)
                 .collect(Collectors.toSet());
     }
 }
