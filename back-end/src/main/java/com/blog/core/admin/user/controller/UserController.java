@@ -54,7 +54,7 @@ public class UserController {
         }
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
+    @PostAuthorize("returnObject.data.username == authentication.name")
     @GetMapping("/{id}")
     public ResponseData<?> getUser(@PathVariable Long id) {
         try {

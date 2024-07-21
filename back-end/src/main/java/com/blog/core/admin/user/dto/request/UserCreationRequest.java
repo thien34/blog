@@ -15,10 +15,11 @@ import java.time.Instant;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
+
     @Size(min = 5, message = "Username must be least 5 characters")
     String username;
 
-    @Email
+    @Email(message = "Email should be valid")
     String email;
 
     String firstName;

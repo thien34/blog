@@ -2,16 +2,13 @@ package com.blog.core.admin.user.service.impl;
 
 import com.blog.core.admin.user.dto.request.PasswordCreationRequest;
 import com.blog.core.admin.user.dto.request.UserCreationRequest;
-import com.blog.core.admin.user.dto.request.UserRoleMappingRequest;
 import com.blog.core.admin.user.dto.request.UserUpdateRequest;
 import com.blog.core.admin.user.dto.response.UserResponse;
 import com.blog.core.admin.user.mapper.UserMapper;
 import com.blog.core.admin.user.service.UserPasswordService;
-import com.blog.core.admin.user.service.UserRoleMappingService;
 import com.blog.core.admin.user.service.UserService;
 import com.blog.core.common.PageResponse;
 import com.blog.entity.User;
-import com.blog.infrastructure.constant.Role;
 import com.blog.infrastructure.exception.IllegalArgumentException;
 import com.blog.infrastructure.exception.ResourceNotFoundException;
 import com.blog.repository.UserRepository;
@@ -33,7 +30,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserPasswordService userPasswordService;
-    private final UserRoleMappingService userRoleMappingService;
 
     @Override
     @Transactional
@@ -52,13 +48,6 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userPasswordService.createUserPassword(creationRequest);
-
-        //3. save role
-        UserRoleMappingRequest roleMappingRequest = UserRoleMappingRequest.builder()
-                .userId(user.getId())
-                .roleId(Role.USER.getId())
-                .build();
-        userRoleMappingService.saveUserRoleMapping(roleMappingRequest);
     }
 
     @Override

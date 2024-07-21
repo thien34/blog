@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,7 +18,6 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -84,7 +85,12 @@ public class User extends Auditable {
     @Column(name = "deleted")
     Boolean deleted;
 
-    @OneToMany(mappedBy = "user")
-    Set<UserUserRoleMapping> userUserRoleMappings = new LinkedHashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_role_mapping",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    Set<Role> roles;
 
 }
