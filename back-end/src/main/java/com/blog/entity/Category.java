@@ -25,9 +25,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "blog_comment")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BlogComment {
+@Table(name = "category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,23 +35,25 @@ public class BlogComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id")
-    User user;
+    @JoinColumn(name = "parent_category_id")
+    Category parentCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "blog_post_id")
-    BlogPost blogPost;
+    @Column(name = "name", length = Integer.MAX_VALUE)
+    String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "blog_comment_parent_id")
-    BlogComment blogCommentParent;
+    @Column(name = "published")
+    Boolean published;
 
-    @Column(name = "comment_text", length = Integer.MAX_VALUE)
-    String commentText;
+    @Column(name = "show_on_home_page")
+    Boolean showOnHomePage;
 
-    @Column(name = "is_approved")
-    Boolean isApproved;
+    @Column(name = "include_in_top_menu")
+    Boolean includeInTopMenu;
+
+    @Column(name = "page_size")
+    Integer pageSize;
+
+    @Column(name = "display_order")
+    Integer displayOrder;
 
 }

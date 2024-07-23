@@ -6,26 +6,32 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@NoArgsConstructor
 @Builder
+@Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "tag")
-public class Tag extends BaseEntity {
-
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", nullable = false)
+    Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "name", length = Integer.MAX_VALUE)
+    String name;
+
+    @Column(name = "deleted")
+    Boolean deleted;
 
 }

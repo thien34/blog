@@ -25,9 +25,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "blog_comment")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BlogComment {
+@Table(name = "product_category_mapping")
+public class ProductCategoryMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,23 +35,15 @@ public class BlogComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id")
-    User user;
+    @JoinColumn(name = "category_id")
+    Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "blog_post_id")
     BlogPost blogPost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "blog_comment_parent_id")
-    BlogComment blogCommentParent;
-
-    @Column(name = "comment_text", length = Integer.MAX_VALUE)
-    String commentText;
-
-    @Column(name = "is_approved")
-    Boolean isApproved;
+    @Column(name = "display_order")
+    Integer displayOrder;
 
 }
