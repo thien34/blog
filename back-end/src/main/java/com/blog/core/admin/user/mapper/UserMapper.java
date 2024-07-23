@@ -21,6 +21,7 @@ public interface UserMapper {
 
     @Mapping(target = "active", constant = "true")
     @Mapping(target = "deleted", constant = "false")
+    @Mapping(target = "roles", ignore = true)
     User mapToEntity(UserCreationRequest userRequest);
 
     User mapToEntity(UserUpdateRequest userRequest, @MappingTarget User user);

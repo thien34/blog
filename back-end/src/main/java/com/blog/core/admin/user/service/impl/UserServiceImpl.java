@@ -8,9 +8,11 @@ import com.blog.core.admin.user.mapper.UserMapper;
 import com.blog.core.admin.user.service.UserPasswordService;
 import com.blog.core.admin.user.service.UserService;
 import com.blog.core.common.PageResponse;
+import com.blog.entity.Role;
 import com.blog.entity.User;
 import com.blog.infrastructure.exception.IllegalArgumentException;
 import com.blog.infrastructure.exception.ResourceNotFoundException;
+import com.blog.repository.RoleRepository;
 import com.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +33,23 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserPasswordService userPasswordService;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
     public void createUser(UserCreationRequest userRequest) {
         //1. save user
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(userRequest.getUsername()))) {
+        if (userRepository.existsByUsername(userRequest.getUsername())) {
             throw new IllegalArgumentException("Username is already taken!");
         }
 
-        User user = userRepository.save(UserMapper.INSTANCE.mapToEntity(userRequest));
+        roleRepository.findByName("USER").orElseGet(() ->
+                roleRepository.save(Role.builder().name("USER").build()));
+
+        User user = UserMapper.INSTANCE.mapToEntity(userRequest);
+        user.setRoles(Set.of(roleRepository.findByName("USER").get()));
+
+        user = userRepository.save(user);
 
         //2. save user password
         PasswordCreationRequest creationRequest = PasswordCreationRequest.builder()
