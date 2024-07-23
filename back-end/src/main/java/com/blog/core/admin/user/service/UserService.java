@@ -9,7 +9,7 @@ public interface UserService {
 
     void createUser(UserCreationRequest userRequest);
 
-    PageResponse<?> getUsers(String username, int pageNo, int pageSize);
+    PageResponse<?> getUsers(String username, Integer pageNo, Integer pageSize);
 
     UserResponse getUser(Long id);
 

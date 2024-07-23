@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponse<?> getUsers(String username, int pageNo, int pageSize) {
+    public PageResponse<?> getUsers(String username, Integer pageNo, Integer pageSize) {
         if (pageNo < 0 || pageSize <= 0) {
             throw new IllegalArgumentException("Invalid page number or page size");
         }
